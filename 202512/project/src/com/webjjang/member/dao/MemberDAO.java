@@ -93,6 +93,43 @@ public class MemberDAO {
 		return result;
 	} // write()의 끝
 
+	// 2-2. 회원(내) 정보보기 - 데이터 가져오기(R) - 1개 데이터 가져오기.(view)
+	public MemberVO view(String id) throws Exception {
+		MemberVO vo = null;
+		
+		// 1. 드라이버 확인
+		Class.forName(DRIVER);
+		// 2. 연결 객체
+		con = DriverManager.getConnection(URL, UID, UPW);
+		// 3. SQL 작성
+		String sql = "select m.id, m.name, m.gender, to_char(m.birth, 'yyyy-mm-dd') birth, "
+				+ " m.tel, m.email, g.gradeName from member m, grade g "
+				+ " where (id = ?) and (m.gradeNo = g.gradeNo)";
+		// 4. 실행 객체 & 데이터 세팅
+		pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, id);
+		// 5. 실행
+		rs = pstmt.executeQuery();
+		// 6. 저장
+		if(rs != null && rs.next()) {
+			vo = new MemberVO();
+			vo.setId(rs.getString("id"));
+			vo.setName(rs.getString("name"));
+			vo.setGender(rs.getString("gender"));
+			vo.setBirth(rs.getString("birth"));
+			vo.setTel(rs.getString("tel"));
+			vo.setEmail(rs.getString("email"));
+			vo.setGradeName(rs.getString("gradeName"));
+		}
+		// 7. 닫기
+		if(con != null) con.close();
+		if(pstmt != null) pstmt.close();
+		if(rs != null) rs.close();
+		
+		
+		return vo;
+	} // view()의 끝
+	
 	// 3-1 . 아이디 찾기 처리 - 데이터 가져오기(R) - 1개 데이터 가져오기.(view)
 	public String searchId(MemberVO vo) throws Exception{
 		String id = null;

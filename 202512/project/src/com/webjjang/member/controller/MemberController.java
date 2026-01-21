@@ -11,6 +11,7 @@ import com.webjjang.member.service.MemberCheckPwService;
 import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberSearchIdService;
 import com.webjjang.member.service.MemberUserChangePwService;
+import com.webjjang.member.service.MemberViewService;
 import com.webjjang.member.service.MemberWriteService;
 import com.webjjang.member.vo.Login;
 import com.webjjang.member.vo.LoginVO;
@@ -39,10 +40,10 @@ public class MemberController {
 				if(!Login.isLogin()) // 로그인을 안한 경우 메뉴 출력
 					System.out.println(" 1. 로그인  2. 회원가입  3. 아이디 찾기  4. 비밀번호 찾기");
 				else { // 로그인을 한 경우 메뉴 출력
-					System.out.println(" 1. 로그아웃  2. 내 정보보기  3. 비밀번호 변경  4. 회원 탈퇴");
+					System.out.println(" 1. 로그아웃  2. 내 정보보기  3. 비밀번호 변경 4. 내 정보 수정 5. 회원 탈퇴");
 					// 로그인을 했고 관리자인 경우 관리자 메뉴가 나와야 한다.
 					if(Login.isAdmin()) {
-						System.out.println(" 5. 회원리스트  6. 회원 상태 변경  7. 회원 등급 변경");
+						System.out.println(" 6. 회원리스트 7. 회원 정보보기 8. 회원 상태 변경  9. 회원 등급 변경");
 					}
 				}// 메뉴 출력의 끝
 				System.out.println(" 0. 이전 메뉴");
@@ -88,8 +89,10 @@ public class MemberController {
 						System.out.println(" 축하드립니다. 회원가입이 되셨습니다. 로그인하세요.");
 						System.out.println("*****************************************\n");
 					} else { // 로그인을 한 경우 내 정보보기 진행
-						// 2. 내 정보 보기 - 구현 안함.
-						
+						// 2. 내 정보 보기
+						//  Longin에서 id를 가져와서 정보를 가져오다.
+						MemberVO vo = (MemberVO) Execute.execute(new MemberViewService(), Login.getId());
+						MemberPrint.print(vo, 1);
 					}
 					break;
 				case "3":
