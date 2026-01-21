@@ -194,7 +194,7 @@ public class MemberDAO {
 		
 		// 3. 실행할 쿼리 작성
 		String sql = "select m.id, m.name, m.gender, to_char(m.birth, 'yyyy-mm-dd') birth, "
-				+ " m.tel, m.email, m.gradeNo, g.gradeName "
+				+ " m.tel, m.email, m.status, m.gradeNo, g.gradeName "
 				+ " from member m, grade g where (m.gradeNo = g.gradeNo) order by id";
 		
 		// 4. 실행 객체 & 데이터 세팅
@@ -214,6 +214,7 @@ public class MemberDAO {
 				vo.setBirth(rs.getString("birth"));
 				vo.setTel(rs.getString("tel"));
 				vo.setEmail(rs.getString("email"));
+				vo.setStatus(rs.getString("status"));
 				vo.setGradeNo(rs.getInt("gradeNo"));
 				vo.setGradeName(rs.getString("gradeName"));
 				
