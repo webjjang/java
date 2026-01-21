@@ -167,6 +167,18 @@ public class MemberController {
 						Main.invalidMenuPrint();
 					}
 					break;
+				case "6": // 관리자 - 
+					break;
+				case "7": // 관리자 - 회원 정보보기
+					if(Login.isAdmin()) {
+						MemberVO vo 
+						= (MemberVO) Execute.execute(new MemberViewService(), In.getStr("정보를 보기의 아이디"));
+						MemberPrint.print(vo, 0);
+					} else {
+						// 잘못된 메뉴 처리
+						Main.invalidMenuPrint();
+					}
+					break;
 				case "0":
 					
 					return;
