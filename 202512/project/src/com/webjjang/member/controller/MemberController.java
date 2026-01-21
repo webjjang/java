@@ -1,5 +1,6 @@
 package com.webjjang.member.controller;
 
+import java.util.List;
 import java.util.Random;
 
 import com.webjjang.main.controller.Main;
@@ -7,6 +8,7 @@ import com.webjjang.main.service.Execute;
 import com.webjjang.member.service.LoginService;
 import com.webjjang.member.service.MemberChangePwService;
 import com.webjjang.member.service.MemberCheckPwService;
+import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberSearchIdService;
 import com.webjjang.member.service.MemberUserChangePwService;
 import com.webjjang.member.service.MemberWriteService;
@@ -14,9 +16,11 @@ import com.webjjang.member.vo.Login;
 import com.webjjang.member.vo.LoginVO;
 import com.webjjang.member.vo.MemberVO;
 import com.webjjang.util.io.In;
+import com.webjjang.util.io.MemberPrint;
 
 public class MemberController {
 
+	@SuppressWarnings("unchecked")
 	public void execute() {
 		// 회원관리 처리 무한 반복
 		while(true) {
@@ -152,6 +156,10 @@ public class MemberController {
 				case "5": // 관리자 - 회원리스트
 					if(Login.isAdmin()) { // 관리자인 경우 처리
 						System.out.println("5. 회원리스트 처리");
+						// DB 에서 데이터 가져오기
+						List<MemberVO> list = (List<MemberVO>) Execute.execute(new MemberListService(), null);
+						// 데이터 출력하기
+						MemberPrint.print(list);
 					} else {
 						Main.invalidMenuPrint();
 					}
