@@ -7,6 +7,7 @@ import com.webjjang.main.controller.Main;
 import com.webjjang.main.service.Execute;
 import com.webjjang.member.service.LoginService;
 import com.webjjang.member.service.MemberChangePwService;
+import com.webjjang.member.service.MemberChangeStatueService;
 import com.webjjang.member.service.MemberCheckPwService;
 import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberSearchIdService;
@@ -184,9 +185,19 @@ public class MemberController {
 				case "8": // 관리자 - 회원 상태 변경
 					// 상태 변경할 아이디와 상태를 입력 받는다.
 					if(Login.isAdmin()) {
-						MemberVO vo 
-						= (MemberVO) Execute.execute(new MemberViewService(), In.getStr("정보를 보기의 아이디"));
-						MemberPrint.print(vo, 0);
+						MemberVO vo = new MemberVO();
+						vo.setId(In.getStr("아이디"));
+						// 입력한 아이디가 로그인한 관리자의 아이디와 같으면 변경 불가능 출력하고 빠져나간다.
+						if(vo.getId().equals(Login.getId())) {
+							System.out.println("** 로그인한 관리자의 상태는 변경할 수 없습니다. **");
+							break;
+						}
+						vo.setStatus(In.getStr("상태(정상/탈퇴/강퇴/휴면)"));
+						Integer result = (Integer) Execute.execute(new MemberChangeStatueService(), vo);
+						if(result == 1)
+							System.out.println("** 아이디 " + vo.getId() + "의 상태가 " + vo.getStatus()
+							+ "(으)로 변경되었습니다. **");
+						else System.out.println("** 상태 변경에 실패하였습니다. **");
 					} else {
 						// 잘못된 메뉴 처리
 						Main.invalidMenuPrint();
