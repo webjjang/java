@@ -32,8 +32,8 @@ public class MemberController {
 				// 로그인 안한 경우 메뉴
 				//  - 1. 로그인  2. 회원가입  3. 아이디 찾기  4. 비밀번호 찾기
 				// 로그인 한 경우 메뉴
-				//  - 1. 로그아웃  2. 내 정보보기  3. 비밀번호 변경  4. 회원 탈퇴
-				//  -   관리자 : 5. 회원리스트  6. 회원 상태 변경  7. 회원 등급 변경
+				//  - 1. 로그아웃  2. 내 정보보기  3. 비밀번호 변경  4. 내 정보 수정 5. 회원 탈퇴
+				//  -   관리자 : 6. 회원리스트 7. 회원 정보보기 8. 회원 상태 변경  9. 회원 등급 변경
 				// 1. 일반게시판 메뉴 출력
 				System.out.println("<<< 회원 관리 메뉴 >>>");
 				System.out.println("======================================================");
@@ -151,12 +151,15 @@ public class MemberController {
 							System.out.println(" 정보를 다시 확인하고 다시 시도해 주세요 ");
 							System.out.println("*********************************\n");
 						}
-					} else { // 로그인을 한 경우 회원 탈퇴 진행
-						// 4. 회원 탈퇴
+					} else { // 로그인을 한 경우 내 정보 수정 진행
+						// 4. 내 정보 수정
 						
 					}
 					break;
-				case "5": // 관리자 - 회원리스트
+				case "5": // 회원 탈퇴 진행 - 비밀번호가 맞으면 회원 탈퇴 진행(정상 -> 탈퇴 변경)
+					// 아이디 - 로그인 정보 자동으로 가져온다. 비밀번호 - 사용자에게 받는다.
+					break;
+				case "6": // 관리자 - 회원리스트
 					if(Login.isAdmin()) { // 관리자인 경우 처리
 						System.out.println("5. 회원리스트 처리");
 						// DB 에서 데이터 가져오기
@@ -164,12 +167,32 @@ public class MemberController {
 						// 데이터 출력하기
 						MemberPrint.print(list);
 					} else {
+						// 잘못된 메뉴 처리
 						Main.invalidMenuPrint();
 					}
 					break;
-				case "6": // 관리자 - 
-					break;
 				case "7": // 관리자 - 회원 정보보기
+					if(Login.isAdmin()) {
+						MemberVO vo 
+						= (MemberVO) Execute.execute(new MemberViewService(), In.getStr("정보를 보기의 아이디"));
+						MemberPrint.print(vo, 0);
+					} else {
+						// 잘못된 메뉴 처리
+						Main.invalidMenuPrint();
+					}
+					break;
+				case "8": // 관리자 - 회원 상태 변경
+					// 상태 변경할 아이디와 상태를 입력 받는다.
+					if(Login.isAdmin()) {
+						MemberVO vo 
+						= (MemberVO) Execute.execute(new MemberViewService(), In.getStr("정보를 보기의 아이디"));
+						MemberPrint.print(vo, 0);
+					} else {
+						// 잘못된 메뉴 처리
+						Main.invalidMenuPrint();
+					}
+					break;
+				case "9": // 관리자 - 회원 등급변경
 					if(Login.isAdmin()) {
 						MemberVO vo 
 						= (MemberVO) Execute.execute(new MemberViewService(), In.getStr("정보를 보기의 아이디"));
