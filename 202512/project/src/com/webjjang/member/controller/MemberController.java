@@ -6,6 +6,7 @@ import java.util.Random;
 import com.webjjang.main.controller.Main;
 import com.webjjang.main.service.Execute;
 import com.webjjang.member.service.LoginService;
+import com.webjjang.member.service.MemberChangeGradeService;
 import com.webjjang.member.service.MemberChangePwService;
 import com.webjjang.member.service.MemberChangeStatueService;
 import com.webjjang.member.service.MemberCheckPwService;
@@ -189,15 +190,15 @@ public class MemberController {
 						vo.setId(In.getStr("아이디"));
 						// 입력한 아이디가 로그인한 관리자의 아이디와 같으면 변경 불가능 출력하고 빠져나간다.
 						if(vo.getId().equals(Login.getId())) {
-							System.out.println("** 로그인한 관리자의 상태는 변경할 수 없습니다. **");
+							System.out.println("** 로그인한 관리자의 상태는 변경할 수 없습니다. **\n");
 							break;
 						}
 						vo.setStatus(In.getStr("상태(정상/탈퇴/강퇴/휴면)"));
 						Integer result = (Integer) Execute.execute(new MemberChangeStatueService(), vo);
 						if(result == 1)
 							System.out.println("** 아이디 " + vo.getId() + "의 상태가 " + vo.getStatus()
-							+ "(으)로 변경되었습니다. **");
-						else System.out.println("** 상태 변경에 실패하였습니다. **");
+							+ "(으)로 변경되었습니다. **\n");
+						else System.out.println("** 상태 변경에 실패하였습니다. **\n");
 					} else {
 						// 잘못된 메뉴 처리
 						Main.invalidMenuPrint();
@@ -205,9 +206,20 @@ public class MemberController {
 					break;
 				case "9": // 관리자 - 회원 등급변경
 					if(Login.isAdmin()) {
-						MemberVO vo 
-						= (MemberVO) Execute.execute(new MemberViewService(), In.getStr("정보를 보기의 아이디"));
-						MemberPrint.print(vo, 0);
+						MemberVO vo = new MemberVO();
+						vo.setId(In.getStr("아이디"));
+						// 입력한 아이디가 로그인한 관리자의 아이디와 같으면 변경 불가능 출력하고 빠져나간다.
+						if(vo.getId().equals(Login.getId())) {
+							System.out.println("** 로그인한 관리자의 등급을 변경할 수 없습니다. **\n");
+							break;
+						}
+						vo.setGradeNo(Integer.parseInt(In.getStr("1. 일반회원 / 9. 관리자")));
+						Integer result = (Integer) Execute.execute(new MemberChangeGradeService(), vo);
+						if(result == 1)
+							System.out.println("** 아이디 " + vo.getId() + "의 등급을 " 
+							+ ((vo.getGradeNo() == 1)?"일반회원":"관리자")
+							+ "(으)로 변경되었습니다. **\n");
+						else System.out.println("** 등급 변경에 실패하였습니다. **\n");
 					} else {
 						// 잘못된 메뉴 처리
 						Main.invalidMenuPrint();

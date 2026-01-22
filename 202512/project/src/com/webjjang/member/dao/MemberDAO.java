@@ -257,5 +257,27 @@ public class MemberDAO {
 		return result;
 	} // changeStatus()의 끝
 
+
+	// 9. 회원 등급 변경
+	// id와 등급 받는다..
+	public Integer changeGrade(MemberVO vo) throws Exception {
+		Integer result = 0;
+		
+		// 1. 드라이버 확인 & 2. 연결 객체
+		con = DB.getConnection();
+		// 3. SQL 작성
+		String sql = "update member set gradeNo = ? where id = ? ";
+		// 4. 실행객체 & 데이터 세팅
+		pstmt = con.prepareStatement(sql);
+		pstmt.setInt(1, vo.getGradeNo());
+		pstmt.setString(2, vo.getId());
+		// 5. 실행 //6. 데이터 저장
+		// select - executeQuery() : rs, insert, update, delete - executeUpdate() : Integer
+		result = pstmt.executeUpdate();
+		// 7. 닫기
+		DB.close(con, pstmt);
+		
+		return result;
+	} // changeStatus()의 끝
 	
 } // 클래스의 끝
