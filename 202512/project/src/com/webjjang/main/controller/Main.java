@@ -19,6 +19,16 @@ public class Main {
 		System.out.println(" 방갑습니다. 좋은 시간 되세요.~~~~~~");
 		System.out.println("---------------------------------\n");
 		
+		// DB 드라이버 확인.
+		try {
+			Class.forName("com.webjjang.util.db.DB");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("DB 클래스가 존재하지 않아 시스템을 종료합니다. -----------");
+			System.exit(1);
+		}
+		
 		// 종료를 선택하기 전까지 무한반복
 		// while(~) - ~ 조건이 true 인 동안 반복 처리한다.
 		//   - 빠져 나가는 방법 :  break; - while문 빠져 나가기. return; - main()를 빠져나간다.
@@ -41,6 +51,7 @@ public class Main {
 			case "1":
 				// System.out.println("일반게시판 처리");
 				// System.out.println("BoardController 실행 전.---------");
+				// BoardController를 실행하는 방법 - 클래스 생성하고 메서드 호출
 				new BoardController().execute();
 				// System.out.println("BoardController 실행 후.---------");
 				break;
@@ -70,6 +81,7 @@ public class Main {
 		
 	} // main()의 끝
 	
+	// 반복 , 복잡 -> 메서드나 클래스를 만든다.
 	// 잘못된 메뉴 선택 출력 메서드 -> Main.invalidMenuPrint()
 	public static void invalidMenuPrint() {
 		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");

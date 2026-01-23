@@ -8,16 +8,22 @@ import com.webjjang.board.service.BoardUpdateService;
 import com.webjjang.board.service.BoardViewService;
 import com.webjjang.board.service.BoardWriteService;
 import com.webjjang.board.vo.BoardVO;
+import com.webjjang.main.controller.Main;
 import com.webjjang.main.service.Execute;
 import com.webjjang.util.io.BoardPrint;
 import com.webjjang.util.io.In;
 
+// Controller
+//  - 메뉴 출력 -> 메뉴 입력 -> 메뉴 처리 : 무한 반복
+//  - 예외 처리 - 위의 정상 처리를 try로 묶는다. catch로 예외 처리를 한다.
+//  - 모듈(일반게시판)을 처리한다.
+//  - 데이터 수집 : DB에서 가져온다. 사용자에게 입력 받는다.
 // Main - (BoardController) - BoardListService - BoardDAO // BoardVO
 public class BoardController {
 
 	// PL이 메서드 이름을 정한다.
 	public void execute() {
-		System.out.println("BoardController.execute()------");
+		// System.out.println("BoardController.execute()------");
 		// 종료를 선택하기 전까지 무한반복
 		// while(~) - ~ 조건이 true 인 동안 반복 처리한다.
 		//   - 빠져 나가는 방법 :  break; - while문 빠져 나가기. return; - main()를 빠져나간다.
@@ -25,7 +31,7 @@ public class BoardController {
 		while(true) { // for(;;)
 			try { // 정상처리
 				// 일반게시판 처리
-				// 1. 일반게시판 메뉴 출력
+				// 1. 일반게시판 메뉴 출력 - 일반 게시판이 가지고 있는 기능
 				System.out.println("<<< 일반 게시판 메뉴 >>>");
 				System.out.println("=========================================");
 				System.out.println(" 1. 리스트  2. 글보기  3. 글등록");
@@ -46,7 +52,9 @@ public class BoardController {
 					// Service를 바로 생성하고 실행 -> Execute가 실행하면 로그를 남긴다.
 					// List<BoardVO> list = new BoardListService().service(null);
 					@SuppressWarnings("unchecked")
+					// DB에서 데이터 수집을 해온다.
 					List<BoardVO> list = (List<BoardVO>) Execute.execute(new BoardListService(), null);
+					// 사용자에게 제공한다.
 					BoardPrint.print(list);
 					break;
 				case "2":
@@ -108,22 +116,22 @@ public class BoardController {
 					else System.out.println("****** 삭제가 되지 않았습니다. 정보를 다시 확인해 주세요. *******");
 					break;
 				case "0": // 이전 메뉴
+					// 자신을 호출한 프로그램으로 돌아간다. Main.main()
 					return;
 	
 				default:
-					//
-					System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-					System.out.println(" 잘못된 메뉴를 입력하셨습니다. 다시 입력해 주세요.");
-					System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+					// 잘못된 메뉴 처리
+					Main.invalidMenuPrint();
 					break;
 				} // switch ~ case 라벨: ~ default 의 끝
 				System.out.println(); // 화면을 구분하는 빈줄 출력
 			} // try 정상처리 의 끝
 			catch (Exception e) { // 예외 처리
-				e.printStackTrace(); // 개발자를 위한 예외 상세 출력
+				// e.printStackTrace(); // 개발자를 위한 예외 상세 출력
 				// 사용자를 위한 예외 코드 작성
 				System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 				System.out.println(" 일반 게시판 처리 중 오류가 발생되었습니다.");
+				System.out.println(" 오류 : " + e.getMessage());
 				System.out.println(" 다시 한번 실행해 주시고 오류가 계속되면 오류 게시판에 남겨 주세요.");
 				System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
 			} // catch 의 끝

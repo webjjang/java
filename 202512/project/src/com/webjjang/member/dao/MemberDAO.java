@@ -52,6 +52,27 @@ public class MemberDAO {
 		return vo;
 	} // login()의 끝
 	
+	// 1-1-1 최근 접속일 변경(U) - id
+	public Integer changeConDate(String id) throws Exception {
+		Integer result = 0;
+		
+		// 1. 드라이버 확인 & 2. 연결 객체
+		con = DB.getConnection();
+		// 3. SQL 작성
+		String sql = "update member set conDate = sysdate where id = ? ";
+		// 4. 실행객체 & 데이터 세팅
+		pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, id);
+		// 5. 실행 //6. 데이터 저장
+		// select - executeQuery() : rs, insert, update, delete - executeUpdate() : Integer
+		result = pstmt.executeUpdate();
+		// 7. 닫기
+		DB.close(con, pstmt);
+		
+		return result;
+	} // changeConDate()의 끝
+ 
+	
 	// 1-2. 로그아웃 처리 - DB 사용하지 않음.
 	
 	// 2-1. 회원가입

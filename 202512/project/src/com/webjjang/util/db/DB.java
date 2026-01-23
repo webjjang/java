@@ -35,7 +35,7 @@ public class DB {
 		if(pstmt != null) pstmt.close();
 	}
 	
-	// 사용했던 객체 닫기 - insert, update, delete
+	// 사용했던 객체 닫기 - select
 	public static void close(Connection con, PreparedStatement pstmt, ResultSet rs) throws Exception {
 		close(con, pstmt);
 		if(rs != null) rs.close();

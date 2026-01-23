@@ -6,6 +6,7 @@ import java.util.Random;
 import com.webjjang.main.controller.Main;
 import com.webjjang.main.service.Execute;
 import com.webjjang.member.service.LoginService;
+import com.webjjang.member.service.MemberChangeConDateService;
 import com.webjjang.member.service.MemberChangeGradeService;
 import com.webjjang.member.service.MemberChangePwService;
 import com.webjjang.member.service.MemberChangeStatueService;
@@ -68,6 +69,9 @@ public class MemberController {
 						// 로그인 처리 - vo가 null이 아니면 특별한 위치에 저장할 장소에 가져온 데이터를 저장한다.
 						if( vo == null) throw new Exception("회원 정보를 확인하시고 다시 실행해 보세요.");
 						Login.setLoginVO(vo);// 로그인 처리를 한다.
+						// 최신 접속일을 변경한다.
+						Execute.execute(new MemberChangeConDateService(), vo.getId());
+						
 					} else {// 로그인을 한경우.
 						// 1. 로그아웃 처리한다.
 						Login.setLoginVO(null); // 없는 데이터 null을 세팅한다. - 로그아웃
@@ -237,6 +241,12 @@ public class MemberController {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
+				// 사용자를 위한 예외 코드 작성
+				System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+				System.out.println(" 회원 관리 처리 중 오류가 발생되었습니다.");
+				System.out.println(" 오류 : " + e.getMessage());
+				System.out.println(" 다시 한번 실행해 주시고 오류가 계속되면 오류 게시판에 남겨 주세요.");
+				System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
 			} // try ~ catch의 끝
 			
 		} // while(true)의 끝
